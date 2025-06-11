@@ -1,0 +1,128 @@
+/* styles.css */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f7fa;
+  color: #333;
+}
+
+
+
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.email-item {
+  border-bottom: 1px solid #e0e0e0;
+  padding: 15px 0;
+}
+
+.email-item:last-child {
+  border-bottom: none;
+}
+
+.email-item strong {
+  display: inline-block;
+  width: 80px;
+}
+
+
+
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(to right, #74ebd5, #9face6);
+  color: #fff;
+  text-align: center;
+}
+
+.home h1 {
+  font-size: 3em;
+  margin-bottom: 20px;
+}
+
+.home button {
+  background-color: #2ecc71;
+  color: white;
+  padding: 12px 24px;
+  font-size: 1.1em;
+  border-radius: 8px;
+}
+
+.email-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.email-table th, .email-table td {
+  border: 1px solid #ddd;
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.email-table th {
+  background-color: #3498db;
+  color: white;
+  font-weight: bold;
+}
+
+
+.email-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+
+
+.email-table button {
+  margin-right: 8px;
+  padding: 6px 12px;
+  font-size: 0.9em;
+  border-radius: 6px;
+}
+
+.email-table .delete {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  width: 115px;
+}
+
+.email-table .markAsRead {
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+}
+
+input[type="text"] {
+  transition: box-shadow 0.2s ease;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  box-shadow: 0 0 4px #007bff;
+  border-color: #007bff;
+}
