@@ -6,9 +6,12 @@ const app = express();
 app.use(bodyParser.json()); // ✅ Parse JSON body data
 app.use(cors());
 
-const CLIENT_ID = '188524636744-mas84r2rs9a9frdknq06dmiq5h03h1tf.apps.googleusercontent.com';
-const CLIENT_SECRET = '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';
-const REDIRECT_URI = 'http://localhost:5000/auth/callback';
+
+require('dotenv').config();
+
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const REDIRECT_URI = process.env.REDIRECT_URI;
 
 const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 
