@@ -9,6 +9,7 @@ app.use(cors());
 
 require('dotenv').config();
 
+
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
@@ -100,7 +101,7 @@ app.post('/gmail/delete', async (req, res) => {
   oAuth2Client.setCredentials({ access_token: token });
 
   const gmail = google.gmail({ version: 'v1', auth: oAuth2Client });
-
+  
   try {
     await gmail.users.messages.trash({
       userId: 'me',
