@@ -12,20 +12,36 @@ function Dashboard() {
   const [emails, setEmails] = useState([]);
   const [filterText, setFilterText] = useState('');
   const [selectedEmails, setSelectedEmails] = useState([]);
+  
 
   useEffect(() => {
+  const delayDebounce = setTimeout(() => {
     const fetchEmails = async () => {
-      if (token) {
-        try {
-          const res = await axios.post('http://localhost:5000/gmail/emails', { token });
-          setEmails(res.data.messages);
-        } catch (err) {
-          console.error('Failed to fetch emails:', err);
-        }
+      if (!token) return;
+
+      try {
+        const endpoint = filterText.trim()
+          ? 'http://localhost:5000/gmail/searchByName'
+          : 'http://localhost:5000/gmail/emails';
+
+        const res = await axios.post(endpoint,
+          filterText.trim()
+            ? { token, sender: filterText }
+            : { token },
+          { headers: { 'Content-Type': 'application/json' } }
+        );
+        console.log(res.data.messages);
+        setEmails(res.data.messages);
+      } catch (err) {
+        console.error('Failed to fetch emails:', err);
       }
     };
+
     fetchEmails();
-  }, [token]);
+  }, 500); // debounce time
+
+  return () => clearTimeout(delayDebounce);
+}, [filterText, token]);
 
   const handleDeleteEmail = async (messageId) => {
     await axios.post('http://localhost:5000/gmail/delete', { token, messageId });
@@ -34,6 +50,8 @@ function Dashboard() {
   const handleMarkAsRead = async (messageId) => {
     await axios.post('http://localhost:5000/gmail/markAsRead', { token, messageId });
   };
+
+  
 
   return (
     <div className="container">
@@ -48,7 +66,7 @@ function Dashboard() {
       />
       <EmailTable
         emails={emails}
-        filterText={filterText}
+        setEmails={setEmails}
         selectedEmails={selectedEmails}
         setSelectedEmails={setSelectedEmails}
         handleDeleteEmail={handleDeleteEmail}

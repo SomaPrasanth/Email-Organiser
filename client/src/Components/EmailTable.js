@@ -3,22 +3,21 @@ import "../styles/index.css"
 
 
 
-function EmailTable({ emails, filterText, selectedEmails, setSelectedEmails, handleDeleteEmail, handleMarkAsRead }) {
-  const filteredEmails = emails.filter(email => email.from.toLowerCase().includes(filterText.toLowerCase()));
-
-  const allSelected = filteredEmails.length > 0 && filteredEmails.every(email =>
+function EmailTable({ emails, setEmails,  selectedEmails, setSelectedEmails, handleDeleteEmail, handleMarkAsRead }) {
+  
+  const allSelected = emails.length > 0 && emails.every(email =>
     selectedEmails.includes(email.messageId)
   );
 
   const toggleSelectAll = () => {
     if (allSelected) {
       // Deselect all filtered emails
-      const remaining = selectedEmails.filter(id => !filteredEmails.some(email => email.messageId === id));
+      const remaining = selectedEmails.filter(id => !emails.some(email => email.messageId === id));
       setSelectedEmails(remaining);
     } else {
       // Add all filtered emails to selectedEmails (avoid duplicates)
       const newSelected = [
-        ...new Set([...selectedEmails, ...filteredEmails.map(email => email.messageId)])
+        ...new Set([...selectedEmails, ...emails.map(email => email.messageId)])
       ];
       setSelectedEmails(newSelected);
     }
@@ -44,14 +43,16 @@ function EmailTable({ emails, filterText, selectedEmails, setSelectedEmails, han
           </tr>
         </thead>
         <tbody>
-          {filteredEmails.map(email => (
+          {emails.map(email => (
             <EmailRow
               key={email.messageId}
+              emails={emails}
               email={email}
               selectedEmails={selectedEmails}
               setSelectedEmails={setSelectedEmails}
               handleDeleteEmail={handleDeleteEmail}
               handleMarkAsRead={handleMarkAsRead}
+              setEmails= {setEmails}
             />
           ))}
         </tbody>

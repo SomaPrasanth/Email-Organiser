@@ -49,7 +49,7 @@ app.post('/gmail/emails', async (req, res) => {
   try {
     const response = await gmail.users.messages.list({
       userId: 'me',
-      maxResults: 5,
+      maxResults: 50,
     });
 
     const messageIds = response.data.messages || [];
@@ -96,7 +96,7 @@ app.post('/gmail/emails', async (req, res) => {
 //Delete
 app.post('/gmail/delete', async (req, res) => {
   const { token, messageId } = req.body;
-    
+  
   const oAuth2Client = new google.auth.OAuth2();
   oAuth2Client.setCredentials({ access_token: token });
 
@@ -139,5 +139,65 @@ app.post('/gmail/markAsRead', async (req, res) => {
     res.status(500).send('Failed to mark as read');
   }
 });
+
+
+//Fetch with name
+
+app.post('/gmail/searchByName', async (req, res) => {
+  const { token, sender } = req.body;
+
+  const oAuth2Client = new google.auth.OAuth2();
+  oAuth2Client.setCredentials({ access_token: token });
+
+  const gmail = google.gmail({ version: 'v1', auth: oAuth2Client });
+
+  try {
+    const response = await gmail.users.messages.list({
+      userId: 'me',
+      q: `from:${sender}`,
+      maxResults: 10,
+    });
+
+    const messageIds = response.data.messages || [];
+
+    const messages = await Promise.all(
+      messageIds.map(async (msg) => {
+        const detail = await gmail.users.messages.get({
+          userId: 'me',
+          id: msg.id,
+        });
+
+        const headers = detail.data.payload.headers;
+        const subjectHeader = headers.find(h => h.name === 'Subject');
+        const fromHeader = headers.find(h => h.name === 'From');
+        const dateHeader = headers.find(h => h.name === 'Date');
+
+        const body = detail.data.payload.parts
+          ? detail.data.payload.parts
+              .filter(part => part.mimeType === 'text/plain')
+              .map(part => part.body.data)
+              .join('')
+          : '(No body)';
+
+        return {
+          messageId: msg.id,
+          subject: subjectHeader?.value || '(No Subject)',
+          from: fromHeader?.value || '(Unknown Sender)',
+          date: dateHeader?.value || '(No Date)',
+          body: Buffer.from(body, 'base64').toString('utf-8'),
+          isRead: detail.data.labelIds && detail.data.labelIds.includes('INBOX') && !detail.data.labelIds.includes('UNREAD'),
+        };
+      })
+    );
+
+    res.json({ messages });
+  } catch (error) {
+    console.error('Search error:', error.message);
+    res.status(500).send('Search failed');
+  }
+});
+
+
+
 
 app.listen(5000, () => console.log('Server running on http://localhost:5000'));

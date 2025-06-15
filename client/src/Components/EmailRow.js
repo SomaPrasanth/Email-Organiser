@@ -1,6 +1,6 @@
 import "../styles/index.css"
 
-function EmailRow({ email, selectedEmails, setSelectedEmails, handleDeleteEmail, handleMarkAsRead }) {
+function EmailRow({ emails, email, selectedEmails, setSelectedEmails, handleDeleteEmail, handleMarkAsRead, setEmails }) {
   const toggleSelection = () => {
     setSelectedEmails(prev =>
       prev.includes(email.messageId)
@@ -16,13 +16,16 @@ function EmailRow({ email, selectedEmails, setSelectedEmails, handleDeleteEmail,
       <td>{email.subject}</td>
       <td>{email.date}</td>
       <td>
-        <button class = "delete" onClick={async () => {
+        <button class="delete" onClick={async () => {
           await handleDeleteEmail(email.messageId);
-          setSelectedEmails(prev => prev.filter(id => id !== email.messageId));
+          setEmails(emails.filter(id => id.messageId !== email.messageId));
         }}>Delete</button>
         {!email.isRead && (
-          <button class = "markAsRead" onClick={async () => {
+          <button class="markAsRead" onClick={async () => {
             await handleMarkAsRead(email.messageId);
+            setEmails(emails.map((e) =>
+              e.messageId === email.messageId ? { ...e, isRead: true } : e
+            ));
           }}>Mark as Read</button>
         )}
       </td>
