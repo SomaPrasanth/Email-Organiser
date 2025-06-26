@@ -45,12 +45,8 @@ Email Organiser is a full-stack Gmail-integrated application that helps users ma
 - Hugging Face Transformers (via API or backend inference)
 - dotenv, body-parser, cors
 
----
-
-## 🧩 Directory Structure
 
 
----
 
 ## 🧪 Setup & Installation
 
@@ -87,14 +83,15 @@ npm start
 npm start
 ```
 Visit http://localhost:3000 to start using the app.
-
-### 🤖 Spam Detection
+---
+## 🤖 Spam Detection
 This project integrates a pretrained BERT spam classification model hosted on Hugging Face:
 SGHOSH1999/bert-email-spam-classifier_tuned
 
 The backend sends email content to the model and returns a spam/ham label to the frontend.
+---
 
-### 📦 Future Enhancements
+## 📦 Future Enhancements
 🗑️ Permanently delete emails
 
 🚫 Block specific senders
@@ -102,11 +99,13 @@ The backend sends email content to the model and returns a spam/ham label to the
 📤 Compose and send emails
 
 🧠 Train custom spam filters based on user feedback
+---
 
-### 📝 License
+## 📝 License
 This project is licensed under the MIT License.
+---
 
-### 🙌 Acknowledgements
+## 🙌 Acknowledgements
 Google Gmail API
 
 Hugging Face Transformers
