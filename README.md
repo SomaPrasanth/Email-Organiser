@@ -99,10 +99,12 @@ The backend sends email content to the model and returns a spam/ham label to the
 📤 Compose and send emails
 
 🧠 Train custom spam filters based on user feedback
+
 ---
 
 ## 📝 License
 This project is licensed under the MIT License.
+
 ---
 
 ## 🙌 Acknowledgements
