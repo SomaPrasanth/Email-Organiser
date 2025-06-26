@@ -65,10 +65,12 @@ Email Organiser is a full-stack Gmail-integrated application that helps users ma
 ```bash
 git clone https://github.com/yourusername/email-organiser.git
 cd email-organiser
-
+```
+```bash
 CLIENT_ID=your-google-client-id
 CLIENT_SECRET=your-google-client-secret
 REDIRECT_URI=http://localhost:5000/auth/callback
+
 
 # In the root or /server directory
 cd server
