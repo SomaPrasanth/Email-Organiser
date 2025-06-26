@@ -62,33 +62,38 @@ Email Organiser is a full-stack Gmail-integrated application that helps users ma
 git clone https://github.com/yourusername/email-organiser.git
 cd email-organiser
 ```
+### 2️⃣IN .env add,
 ```bash
 CLIENT_ID=your-google-client-id
 CLIENT_SECRET=your-google-client-secret
 REDIRECT_URI=http://localhost:5000/auth/callback
-
-
+```
+```bash
 # In the root or /server directory
 cd server
 npm install
 
 # In the /client directory
-cd ../client
+cd client
 npm install
 
 # In /server
-npm start
+npm server.js
 
 # In /client (in a new terminal)
 npm start
 ```
+
 Visit http://localhost:3000 to start using the app.
+
 ---
+
 ## 🤖 Spam Detection
 This project integrates a pretrained BERT spam classification model hosted on Hugging Face:
 SGHOSH1999/bert-email-spam-classifier_tuned
 
 The backend sends email content to the model and returns a spam/ham label to the frontend.
+
 ---
 
 ## 📦 Future Enhancements
