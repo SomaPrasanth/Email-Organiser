@@ -15,11 +15,14 @@ function EmailRow({ emails, email, selectedEmails, setSelectedEmails, handleDele
       <td>{email.from}</td>
       <td>{email.subject}</td>
       <td>{email.date}</td>
+      <td>{email.isSpam ? "🚫 Yes" : "✔️ No"}</td>
+
       <td>
         <button class="delete" onClick={async () => {
           await handleDeleteEmail(email.messageId);
           setEmails(emails.filter(id => id.messageId !== email.messageId));
         }}>Delete</button>
+        
         {!email.isRead && (
           <button class="markAsRead" onClick={async () => {
             await handleMarkAsRead(email.messageId);

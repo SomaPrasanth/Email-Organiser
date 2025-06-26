@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require('axios');
 const { google } = require('googleapis');
 const cors = require('cors');
 const bodyParser = require('body-parser'); // 🚨 Add this line
@@ -49,7 +50,7 @@ app.post('/gmail/emails', async (req, res) => {
   try {
     const response = await gmail.users.messages.list({
       userId: 'me',
-      maxResults: 50,
+      maxResults: 15,
     });
 
     const messageIds = response.data.messages || [];
@@ -69,9 +70,9 @@ app.post('/gmail/emails', async (req, res) => {
 
         const body = detail.data.payload.parts
           ? detail.data.payload.parts
-              .filter(part => part.mimeType === 'text/plain')
-              .map(part => part.body.data)
-              .join('')
+            .filter(part => part.mimeType === 'text/plain')
+            .map(part => part.body.data)
+            .join('')
           : '(No body)';
 
         return {
@@ -96,12 +97,12 @@ app.post('/gmail/emails', async (req, res) => {
 //Delete
 app.post('/gmail/delete', async (req, res) => {
   const { token, messageId } = req.body;
-  
+
   const oAuth2Client = new google.auth.OAuth2();
   oAuth2Client.setCredentials({ access_token: token });
 
   const gmail = google.gmail({ version: 'v1', auth: oAuth2Client });
-  
+
   try {
     await gmail.users.messages.trash({
       userId: 'me',
@@ -174,9 +175,9 @@ app.post('/gmail/searchByName', async (req, res) => {
 
         const body = detail.data.payload.parts
           ? detail.data.payload.parts
-              .filter(part => part.mimeType === 'text/plain')
-              .map(part => part.body.data)
-              .join('')
+            .filter(part => part.mimeType === 'text/plain')
+            .map(part => part.body.data)
+            .join('')
           : '(No body)';
 
         return {
@@ -197,7 +198,16 @@ app.post('/gmail/searchByName', async (req, res) => {
   }
 });
 
+app.post('/check-spam', async (req, res) => {
+  try {
+    const { message } = req.body;
 
-
+    const response = await axios.post('http://localhost:8000/check-spam', { message });
+    res.json(response.data); // returns { label: "spam" | "ham" }
+  } catch (err) {
+    console.error("Error communicating with spam detector:", err.message);
+    res.status(500).json({ error: "Spam detection failed" });
+  }
+});
 
 app.listen(5000, () => console.log('Server running on http://localhost:5000'));

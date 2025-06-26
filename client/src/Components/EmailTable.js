@@ -1,23 +1,35 @@
 import EmailRow from './EmailRow';
-import "../styles/index.css"
+import "../styles/index.css";
 
+function EmailTable({
+  emails,
+  setEmails,
+  selectedEmails,
+  setSelectedEmails,
+  handleDeleteEmail,
+  handleMarkAsRead,
+  filterText,
+  showSpamOnly
+}) {
+  // Filter emails based on sender and spam status
+  const filteredEmails = emails.filter(email => {
+    const matchSender = email.from.toLowerCase().includes(filterText.toLowerCase());
+    const matchSpam = !showSpamOnly || email.isSpam === true;
+    return matchSender && matchSpam;
+  });
 
-
-function EmailTable({ emails, setEmails,  selectedEmails, setSelectedEmails, handleDeleteEmail, handleMarkAsRead }) {
-  
-  const allSelected = emails.length > 0 && emails.every(email =>
-    selectedEmails.includes(email.messageId)
-  );
+  const allSelected = filteredEmails.length > 0 &&
+    filteredEmails.every(email => selectedEmails.includes(email.messageId));
 
   const toggleSelectAll = () => {
     if (allSelected) {
-      // Deselect all filtered emails
-      const remaining = selectedEmails.filter(id => !emails.some(email => email.messageId === id));
+      const remaining = selectedEmails.filter(
+        id => !filteredEmails.some(email => email.messageId === id)
+      );
       setSelectedEmails(remaining);
     } else {
-      // Add all filtered emails to selectedEmails (avoid duplicates)
       const newSelected = [
-        ...new Set([...selectedEmails, ...emails.map(email => email.messageId)])
+        ...new Set([...selectedEmails, ...filteredEmails.map(email => email.messageId)])
       ];
       setSelectedEmails(newSelected);
     }
@@ -39,11 +51,12 @@ function EmailTable({ emails, setEmails,  selectedEmails, setSelectedEmails, han
             <th>From</th>
             <th>Subject</th>
             <th>Date</th>
+            <th>Spam</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {emails.map(email => (
+          {filteredEmails.map(email => (
             <EmailRow
               key={email.messageId}
               emails={emails}
@@ -52,7 +65,7 @@ function EmailTable({ emails, setEmails,  selectedEmails, setSelectedEmails, han
               setSelectedEmails={setSelectedEmails}
               handleDeleteEmail={handleDeleteEmail}
               handleMarkAsRead={handleMarkAsRead}
-              setEmails= {setEmails}
+              setEmails={setEmails}
             />
           ))}
         </tbody>
